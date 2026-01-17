@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo-api
+  template:
+    metadata:
+      labels:
+        app: todo-api
+    spec:
+      containers:
+        - name: todo-api
+          # REPLACE THIS with your actual Docker Hub image
+          image: your-dockerhub-username/todo-api:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          # Observability: Define liveness/readiness probes using Actuator
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 20
